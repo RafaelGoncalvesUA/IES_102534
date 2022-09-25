@@ -1,7 +1,7 @@
 # IES_102534
 
 ## Notebook
-Notas do Lab1: ```lab1/README.md```
+NOTAS DO LAB 1: ```lab1/README.md```
 
 ## Créditos
 **Autor**: Rafael Fernandes Gonçalves (Nº Mec: 102534)

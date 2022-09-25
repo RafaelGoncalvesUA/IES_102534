@@ -181,6 +181,35 @@ public class CityForecast {
 
 Templates para ```.gitignore```: https://github.com/github/gitignore
 
+## Criação de um log com Log4j 2
+O ficheiro de configuração ```log4j2.xml``` pode ser colocado em qualquer subdiretório do classpath da aplicação. Porém, é habitualmente colocado na pasta ```src/main/resources```.
+
+**Guia passo-a-passo**: https://howtodoinjava.com/log4j2/log4j2-xml-configuration-example/
+
+### Escrever para um log:
+
+```
+import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+
+public class Main {
+
+	private static final Logger logger = LogManager.getLogger(Main.class);
+
+	public static void main(final String... args) 
+	{
+		logger.debug("Debug Message Logged !!!");
+		logger.info("Info Message Logged !!!");
+		logger.error("Error Message Logged !!!", new NullPointerException("NullError"));
+	}
+}
+```
+
+## Histórico do repositório
+```git log --reverse --oneline```: ver o histórico do repositório (commit messages).
+
+Este deve ser claro e explícito para os restantes colaboradores do projeto.
+
 
 
 # "Review questions"
