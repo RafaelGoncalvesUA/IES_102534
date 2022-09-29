@@ -22,9 +22,7 @@ Atualmente, recomenda-se a versão OpenJDK 17 LTS. Contudo, neste trabalho prát
 ## Criação de um projeto Maven
 
 ```
-mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -
-DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -
-DinteractiveMode=false
+mvn archetype:generate -DgroupId=com.mycompany.app -DartifactId=my-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.4 -DinteractiveMode=false
 ```
 
 Dos parâmetros indicados, destacam-se duas **Maven *coordinates***:
@@ -213,7 +211,7 @@ public class Main {
 		logger.debug("Debug Message Logged !!!");
 		logger.info("Info Message Logged !!!");
 		logger.error("Error Message Logged !!!",
-        new NullPointerException("NullError"));
+        	new NullPointerException("NullError"));
 	}
 }
 ```
@@ -224,7 +222,7 @@ public class Main {
 Este deve ser claro e explícito para os restantes colaboradores do projeto.
 
 # 1.4) "Introduction to Docker"
-## Níveis de virtualização
+## Ferramentas de virtualização
 - Máquinas virtuais
 - Linux Container (LXC) | Docker container/swarm
 - Kubernetes
@@ -258,9 +256,9 @@ Este deve ser claro e explícito para os restantes colaboradores do projeto.
 ```docker context use [CONTEXTNAME]```
 
 ### Gestão do Docker como utilizador *non-root*
-- ```sudo groupadd docker```: criar um grupo "docker".
+- ```sudo groupadd docker```: cria um grupo "docker".
 
-- ```sudo usermod -aG docker $USER```: adicionar o utilizador ao grupo "docker".
+- ```sudo usermod -aG docker $USER```: adiciona o utilizador ao grupo "docker".
 
 - Log out e log back
 
@@ -269,7 +267,7 @@ Este deve ser claro e explícito para os restantes colaboradores do projeto.
  ```docker run -d -p 80:80 docker/getting-started```
 - "-d": corre um container em *background* (como *daemon*).
 - "-p 80:80": mapeia a porta 80 do *host* para a porta 80 do *container*.
-- "docker/getting-started" - imagem a utilizar. Pode estar já na máquina ou pode ser necessário um *pull* da Docker Hub.
+- "docker/getting-started": imagem a utilizar. Pode estar já na máquina ou pode ser necessário um *pull* da Docker Hub.
 
 Outras opções para o comando ```docker run```:
 - --rm: remove automaticamente o container e o sistema de ficheiros associados, aquando do seu encerramento.
@@ -287,7 +285,7 @@ Comando importante: ```docker build -t getting-started .```
 
 ```docker run -d -p 8000:8000 -p 9443:9443 --name portainer --restart=always -v /var/run/docker.sock:/var/run/docker.sock -v portainer_data:/data portainer/portainer-ce:latest https://localhost:9443```: correr o Portainer num container, fazendo *pull* da sua imagem, se necessário.
 
-## Correr PostegreSQL com *default image*
+## Correr PostegreSQL com a *default image*
 ```docker run --name pg-docker -e POSTGRES_PASSWORD=docker -e POSTGRES_DB=sampledb -e PGDATA=/tmp -d -p 5433:5432 -v ${PWD}:/var/lib/postgresql/data postgres:11```
 
 - Nome do container: pg-docker
@@ -298,11 +296,11 @@ Comando importante: ```docker build -t getting-started .```
 
 > **Nota**: O Docker *daemon*, também conhecido como *dockerd*, é um processo que gere objetos Docker (imagens, *containers*, volumes, etc.). Por isso, para executar comandos Docker, pode ser necessário iniciar o *daemon* manualmente, escrevendo no terminal ```sudo service docker start```.
 
-```docker stop pg-docker```: parar a execução do *container* "pg-docker".
+```docker stop pg-docker```: para a execução do *container* "pg-docker".
 
-```docker start pg-docker```: executar o *container* pg-docker.
+```docker start pg-docker```: executa o *container* pg-docker.
 
-```docker exec -it pg-docker psql -U postgres```: iniciar o postgres no container.
+```docker exec -it pg-docker psql -U postgres```: inicia o PostgreSQL no container.
 
 ## Serviços múltiplos (Docker compose)
 ### Dockerfile
@@ -356,7 +354,7 @@ services:
 ```mvn clean install```
 
 ## Execução do projeto 2
-```cd ../WeatherForecastByCity"```
+```cd ../WeatherForecastByCity```
 
 ```mvn package```
 
@@ -373,7 +371,7 @@ services:
 - **Integration test**: execução de testes de integração.
 - **Verify**: verficação do cumprimento dos padrões de qualidade.
 - **Install**: cópia do código "empacotado" (*packaged code*) para o repositório local Maven.
-- **Deploy**: cópia do código "empacotado" (*packaged code*) para o repositório remoto Maven, ficando disponível para outros *developers*.
+- **Deploy**: cópia do código "empacotado" (*packaged code*) para um repositório remoto Maven, ficando disponível para outros *developers*.
 
 **b)** Sim, é apropriado para executar o projeto. Isso pode ser feito com o comando:
 
@@ -398,9 +396,9 @@ services:
 - **refactor** – código refinado, sem correção de bugs ou adição de funcionalidades.
 - **docs** – atualização de documentação.
 - **style** – alterações que não afetam o propósito do código, mas apenas a sua formatação.
-- **test** – inclusão de novos testes ou correção de testes prévios.
+- **test** – inclusão de novos testes ou correção de testes anteriores.
 - **perf** – melhorias de performance.
-- **build** – alterações que afetam a*build* ou dependências externas.
+- **build** – alterações que afetam a *build* ou dependências externas.
 - **revert** – reversão de um *commit* anterior. 
 
 
@@ -409,7 +407,11 @@ services:
 
 # Referências
 https://www.geeksforgeeks.org/maven-lifecycle-and-basic-maven-commands/
+
 https://www.simplilearn.com/tutorials/maven-tutorial/maven-interview-questions
+
 https://maven.apache.org/guides/introduction/introduction-to-the-lifecycle.html
+
 https://www.docker.com/blog/top-tips-and-use-cases-for-managing-your-volumes/
+
 https://www.educative.io/answers/what-is-the-docker-container-lifecycle
