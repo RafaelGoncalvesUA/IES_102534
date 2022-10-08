@@ -1,3 +1,5 @@
 # Os repositórios criados nos Labs têm o seu próprio .gitignore
-
 *.pdf
+.vscode/
+lab2/apache-tomcat-9.0.67/
+lab2/payara5/
