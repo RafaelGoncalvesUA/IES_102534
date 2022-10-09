@@ -85,12 +85,13 @@ int x = 5 + null; //this will throw an exception
 http://localhost:8080/WebProject-1.0-SNAPSHOT/ServletToValidate?username=username&password=guest
 
 
-
 Payara-Web 5.2022.3 (Web Profile) 
 /bin/asadmin start-domain
 After a few seconds, Payara Server will be up and ready to accept requests. The default 'domain1' domain is configured to listen on port 8080. In your browser, go to http://localhost:8080 to see the default landing page.
 To manage Payara Server, just go to web administration console: http://localhost:4848
 ./bin/asadmin stop-domain
+
+
 
 # 2.2
 
