@@ -107,6 +107,27 @@ To manage Payara Server, just go to web administration console: http://localhost
     <version>9.2.15.v20160210</version>
 </dependency>
 
+
+# 2.3
+
+
+Create a Web Controller
+
+In Spring’s approach to building web sites, HTTP requests are handled by a controller. You can easily identify the controller by the @Controller annotation. In the following example, GreetingController handles GET requests for /greeting by returning the name of a View (in this case, greeting). A View is responsible for rendering the HTML content. The following listing (from src/main/java/com/example/servingwebcontent/GreetingController.java) shows the controller:
+
+
+This controller is concise and simple, but there is plenty going on. We break it down step by step.
+
+The @GetMapping annotation ensures that HTTP GET requests to /greeting are mapped to the greeting() method.
+
+@RequestParam binds the value of the query string parameter name into the name parameter of the greeting() method. This query string parameter is not required. If it is absent in the request, the defaultValue of World is used. The value of the name parameter is added to a Model object, ultimately making it accessible to the view template.
+
+
+Thymeleaf is a modern server-side Java template engine for both web and standalone environments.
+
+Thymeleaf's main goal is to bring elegant natural templates to your development workflow — HTML that can be correctly displayed in browsers and also work as static prototypes, allowing for stronger collaboration in development teams.
+
+
 # Other
 Java2EE
 JavaEE
