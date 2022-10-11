@@ -1,4 +1,4 @@
-package pt.ua.ies.TVQuotesAPI;
+package pt.ua.ies.TVQuotesAPI.POJO;
 
 public class QuoteObject {
     private String quote;

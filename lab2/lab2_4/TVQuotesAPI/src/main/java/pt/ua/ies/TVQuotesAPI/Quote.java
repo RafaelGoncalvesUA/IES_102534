@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.google.gson.Gson;
+
+import pt.ua.ies.TVQuotesAPI.POJO.QuoteObject;
 
 @RestController
 public class Quote {
@@ -24,12 +27,8 @@ public class Quote {
                 response.append(line);
             }
             reader.close();
-            JSONObject obj = new JSONObject(response.toString());
-            String quote = obj.getString("quote");
-            String role = obj.getString("role");
-            String show = obj.getString("show");
-            boolean contain_adult_lang = obj.getBoolean("contain_adult_lang");
-            return new QuoteObject(quote, role, show, contain_adult_lang);
+            Gson gson = new Gson();
+            return gson.fromJson(response.toString(), QuoteObject.class);
 
         } else {
             System.err.println("GET request not worked");

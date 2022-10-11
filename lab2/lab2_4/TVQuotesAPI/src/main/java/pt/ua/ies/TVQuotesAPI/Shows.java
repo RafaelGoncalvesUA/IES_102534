@@ -6,10 +6,12 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+import java.lang.reflect.Type;
+import pt.ua.ies.TVQuotesAPI.POJO.ShowObject;
 
 @RestController
 public class Shows {
@@ -27,14 +29,9 @@ public class Shows {
                 response.append(line);
             }
             reader.close();
-            JSONArray shows = new JSONArray(response.toString());
-            List<ShowObject> results = new ArrayList<ShowObject>();
-            for (int i = 0 ; i < shows.length(); i++) {
-                JSONObject show = shows.getJSONObject(i);
-                String name = show.getString("name");
-                String slug = show.getString("slug");
-                results.add(new ShowObject(name, slug));
-            }
+            Gson gson = new Gson();
+            Type showListType = new TypeToken<ArrayList<ShowObject>>(){}.getType();
+            ArrayList<ShowObject> results = gson.fromJson(response.toString(), showListType);
             return results;
         } else {
             System.err.println("GET request not worked");
