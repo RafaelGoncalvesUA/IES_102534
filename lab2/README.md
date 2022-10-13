@@ -1,151 +1,216 @@
 # 2.1 - "Server-side programming with servlets"
 
-Dentro da pasta bin,
-chmod +x *.sh
-./startup.sh
-./shutdown.sh
+## Servlet
+Um servlet é uma classe Java que corre num servidor e trata de pedidos do cliente, processando-os e respondendo-lhes.
 
-http://localhost:8080
-tail logs/catalina.out
+Para criar um servlet, basta criar uma classe que implemente a interface `javax.servlet.Servlet`. Esta interface define um método `service` que recebe um objeto `javax.servlet.ServletRequest` e um objeto `javax.servlet.ServletResponse`, os quais representam respetivamente o pedido e a resposta do cliente.
 
-import java.io.*;
-import java.util.*;
-import javax.servlet.*;
-import javax.servlet.http.*;
+Um servlet deve estar inserido num **Servlet *container***. Quando um servidor web recebe um pedido, entrega-o ao *container* que, por sua vez, o passa ao Servlet destino.
 
-http://localhost:8080/examples/servlets/reqparams.html
-https://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpServlet.html
+### Quais são as responsabilidades de um servlet container?
+>Ver questão A. da secção "Review Questions"
 
-pload and deploy a .war 
-file (http://localhost:8080/manager). 
-or 
-copy the .war file into <Tomcat root>/webapps
+![Servlet](https://lh3.googleusercontent.com/Ig7kjtbUiYNt86tx49lpvMsZY-Cc-4teAFboao1-szXV450v4J11BEfUFX1qhAnlM5g7t2gp3flPbitnaSqHv285gttOEPkNFCZf8IIk6gkpatXSba3XtbkfnNnmUlRn96SsuGVr9g=w2400)
 
-http://localhost:8080/WebProject-1.0-SNAPSHOT/
-https://howtodoinjava.com/java/servlets/complete-java-servlets-tutorial#webservlet_annotation
+## JavaEE vs JakartaEE
 
+JavaEE (Java Enterprise Edition) é uma plataforma Java que permite a criação de aplicações web escaláveis e seguras. JavaEE, Java2EE, J2EE ou Jakarta EE são nomes diferentes para a mesma plataforma.
 
-HTTP Status 500 – Internal Server Error
+![Java Enterprise Edition](https://www.baeldung.com/wp-content/uploads/2018/12/java_evolution-1.png)
 
-Type Exception Report
+- Em 2018, a Oracle cedeu o Java EE para a Eclipse Foundation.
+- Como a Oracle detinha os diretos de autor sobre a marca Java, a Eclipse Foundation alterou o nome da plataforma para Jakarta EE.
+- O grande objetivo do Jakarta EE é manter o Java **corporativo** e sempre a par das tendências e necessidades do mercado.
+- Quando se trabalha com esta plataforma, é importante distinguir **especificações** e **implementações**. Uma especificação é um conjunto de funcionalidades (interface) que um software deve implementar. Uma implementação é um software que implementa uma ou mais especificações.
+	- Por exemplo, a especificação **Servlet 4.0** define uma interface `javax.servlet.Servlet`. Uma das suas implementações é o **Apache Tomcat 9.0**.
 
-Message Servlet execution threw an exception
+## JAR vs WAR
+**JAR**: Java Archive. É um ficheiro que contém código Java e dependências.
 
-Description The server encountered an unexpected condition that prevented it from fulfilling the request.
-
-Exception
-
-javax.servlet.ServletException: Servlet execution threw an exception
-	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
-
-Root Cause
-
-java.lang.Error: Unresolved compilation problem: 
-	The operator + is undefined for the argument type(s) int, null
-
-	pt.ua.ies.MyFirstServlet.doGet(MyFirstServlet.java:18)
-	javax.servlet.http.HttpServlet.service(HttpServlet.java:670)
-	javax.servlet.http.HttpServlet.service(HttpServlet.java:779)
-	org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
-
-Note The full stack trace of the root cause is available in the server logs.
-
-int x = 5 + null; //this will throw an exception
-/logs/localhost.<date>.log
-08-Oct-2022 21:48:06.620 SEVERE [http-nio-8080-exec-21] org.apache.catalina.core.StandardWrapperValve.invoke Servlet.service() for servlet [MyFirstServlet] in context with path [/WebProject-1.0-SNAPSHOT] threw exception [Servlet execution threw an exception] with root cause
-	java.lang.Error: Unresolved compilation problem: 
-	The operator + is undefined for the argument type(s) int, null
-
-		at pt.ua.ies.MyFirstServlet.doGet(MyFirstServlet.java:18)
-		at javax.servlet.http.HttpServlet.service(HttpServlet.java:670)
-		at javax.servlet.http.HttpServlet.service(HttpServlet.java:779)
-		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:227)
-		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
-		at org.apache.tomcat.websocket.server.WsFilter.doFilter(WsFilter.java:53)
-		at org.apache.catalina.core.ApplicationFilterChain.internalDoFilter(ApplicationFilterChain.java:189)
-		at org.apache.catalina.core.ApplicationFilterChain.doFilter(ApplicationFilterChain.java:162)
-		at org.apache.catalina.core.StandardWrapperValve.invoke(StandardWrapperValve.java:197)
-		at org.apache.catalina.core.StandardContextValve.invoke(StandardContextValve.java:97)
-		at org.apache.catalina.authenticator.AuthenticatorBase.invoke(AuthenticatorBase.java:541)
-		at org.apache.catalina.core.StandardHostValve.invoke(StandardHostValve.java:135)
-		at org.apache.catalina.valves.ErrorReportValve.invoke(ErrorReportValve.java:92)
-		at org.apache.catalina.valves.AbstractAccessLogValve.invoke(AbstractAccessLogValve.java:687)
-		at org.apache.catalina.core.StandardEngineValve.invoke(StandardEngineValve.java:78)
-		at org.apache.catalina.connector.CoyoteAdapter.service(CoyoteAdapter.java:360)
-		at org.apache.coyote.http11.Http11Processor.service(Http11Processor.java:399)
-		at org.apache.coyote.AbstractProcessorLight.process(AbstractProcessorLight.java:65)
-		at org.apache.coyote.AbstractProtocol$ConnectionHandler.process(AbstractProtocol.java:893)
-		at org.apache.tomcat.util.net.NioEndpoint$SocketProcessor.doRun(NioEndpoint.java:1789)
-		at org.apache.tomcat.util.net.SocketProcessorBase.run(SocketProcessorBase.java:49)
-		at org.apache.tomcat.util.threads.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1191)
-		at org.apache.tomcat.util.threads.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:659)
-		at org.apache.tomcat.util.threads.TaskThread$WrappingRunnable.run(TaskThread.java:61)
-		at java.base/java.lang.Thread.run(Thread.java:833)
-
-http://localhost:8080/WebProject-1.0-SNAPSHOT/ServletToValidate?username=username&password=guest
+**WAR**: Web Application Archive. É um ficheiro que contém código Java, dependências e ficheiros de configuração de uma aplicação web.
 
 
-Payara-Web 5.2022.3 (Web Profile) 
-/bin/asadmin start-domain
-After a few seconds, Payara Server will be up and ready to accept requests. The default 'domain1' domain is configured to listen on port 8080. In your browser, go to http://localhost:8080 to see the default landing page.
-To manage Payara Server, just go to web administration console: http://localhost:4848
-./bin/asadmin stop-domain
+## Web vs Application Server
+**Web Server**: Servidor que se encarrega exclusivamente do processamento de pedidos HTTP/HTTPS, respondendo-lhes com ficheiros estáticos (HTML, CSS, JavaScript, etc.).
+
+**Application Server**: Servidor que se encarrega do processamento dos pedidos recebidos por uma aplicação, em vários protocolos (incluindo HTTP/HTTPS), e lhes responde com ficheiros, não só estáticos como dinâmicos, na medida em que o conteúdo apresentado depende do contexto do pedido. Uma vantagem é o uso de multithreading, o que permite atender vários pedidos ao mesmo tempo.
+
+## Apache Tomcat 9.0
+### Inicialização
+```cd apache-tomcat-9.0.67/bin```
+
+```chmod +x *.sh```
+
+```./startup.sh```: arranque do servidor.
+
+```./shutdown.sh```: paragem do servidor.
+
+### Ver log do servidor
+```tail logs/catalina.out```
+
+### Programação de Servlets
+A classe Servlet é abstrata, pelo que as suas subclasses devem implementar pelo menos um método dos seguintes:
+- ```doGet```
+- ```doPost```
+- ```doPut```
+- ```doDelete```
+- ```init``` e ```destroy```
+- ```getServletInfo```
+
+### Passagem de parâmetros
+```java
+@WebServlet(name = "ServletToValidate", urlPatterns = {"/ServletToValidate"})
+public class ServletToValidate extends HttpServlet {
+	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {     
+		String username = request.getParameter("username");
+		String password = request.getParameter("password");
+
+		response.setContentType("text/html;charset=UTF-8");
+		PrintWriter out = response.getWriter();
+		out.println(username + "=" + password);
+	}
+}
+```
+**URL**: ```http://localhost:[PORT]/[APP-NAME]/ServletToValidate?username=username&password=guest```
+
+### Fazer *deploy* de uma aplicação
+*Upload* e *deploy* do .war em ```http://localhost:[PORT]/manager```.
+
+**OU**
+
+Cópia do .war para ```<Tomcat root>/webapps```.
+
+### Aceder ao *endpoint* raiz da aplicação
+```http://localhost:[PORT]/[APP_NAME]```
+
+No caso do exercício 2.1, era ```http://localhost:8080/WebProject-1.0-SNAPSHOT/```.
 
 
+## Payara Server (Web Profile)
+No âmbito da alínea opcional j) do exercício 2.1, escolhi o Payara Server, como alternativa ao Apache Tomcat.
 
-# 2.2
+**Versão utilizada**: Payara-Web 5.2022.3 (Web Profile) 
 
-<packaging>war</packaging>
-<dependency>
-    <groupId>org.eclipse.jetty</groupId>
-    <artifactId>jetty-server</artifactId>
-    <version>9.2.15.v20160210</version>
-</dependency>
-<dependency>
-    <groupId>org.eclipse.jetty</groupId>
-    <artifactId>jetty-servlet</artifactId>
-    <version>9.2.15.v20160210</version>
-</dependency>
+```cd payara5/bin```
 
+```chmod +x asadmin```
 
-# 2.3
+```./asadmin start-domain```: arranque do servidor.
 
+```./asadmin stop-domain```: paragem do servidor.
 
-Create a Web Controller
+Para gerir o Payara Server, é preciso a aceder ao endereço ```http://localhost:4848```, por default.
 
-In Spring’s approach to building web sites, HTTP requests are handled by a controller. You can easily identify the controller by the @Controller annotation. In the following example, GreetingController handles GET requests for /greeting by returning the name of a View (in this case, greeting). A View is responsible for rendering the HTML content. The following listing (from src/main/java/com/example/servingwebcontent/GreetingController.java) shows the controller:
+# 2.2) "Server-side programming with embedded servers"
+## Eclipse Jetty
+O Jetty é um servidor HTTP e Servlet Container 100% escrito em Java. É o grande concorrente do Tomcat e ficou famoso por ser utilizado como o servlet container do JBoss, um servidor de aplicações Java.
 
+A grande vantagem do Jetty relativamente ao Tomcat é a sua fácil configuração. Além disso, foi pioneiro na implementação de I/O assíncrono, para aguentar uma carga maior de utilizadores em simultâneo, sem recorrer a *thread-per-connection*.
 
-This controller is concise and simple, but there is plenty going on. We break it down step by step.
+### Programação de um Jetty *embedded server*
 
-The @GetMapping annotation ensures that HTTP GET requests to /greeting are mapped to the greeting() method.
+```java
+Server server = new Server(PORT);       
+ServletHandler servletHandler = new ServletHandler();
+server.setHandler(servletHandler);
+servletHandler.addServletWithMapping(HelloServlet.class, "/");
+server.start();
+server.join();
+```
+```java
+public static class HelloServlet extends HttpServlet {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		response.setContentType("text/html");
+		response.setStatus(HttpServletResponse.SC_OK);
+		response.getWriter().println("<h1>THIS IS AN EMBEDDED SERVER</h1>"); 
+	} 
+}
+```
 
-@RequestParam binds the value of the query string parameter name into the name parameter of the greeting() method. This query string parameter is not required. If it is absent in the request, the defaultValue of World is used. The value of the name parameter is added to a Model object, ultimately making it accessible to the view template.
+# 2.3) Introduction to web apps with a full-featured framework (Spring Boot)
+## Spring Boot
+O Spring Boot, uma extensão da popular framework Spring para Java, tem como propósito permitir um desenvolvimento rápido e fácil de aplicações (nomeadamente, para a web), sem que o *developer* se tenha de preocupar muito com configurações e dependências.
 
-This code uses Spring @RestController annotation, which marks the class as a controller where every method returns a domain object instead of a view. It is shorthand for including both @Controller and @ResponseBody.
+### Inicialização de uma aplicação Web
+- ```https://start.spring.io/```
+- Selecionar ```Dependências > Spring Web```
 
-A key difference between a traditional MVC controller and the RESTful web service controller shown earlier is the way that the HTTP response body is created. Rather than relying on a view technology to perform server-side rendering of the greeting data to HTML, this RESTful web service controller populates and returns a Greeting object
+### Spring Bean
+Um Spring Bean é basicamente um objeto instanciado, configurado e gerido pelo Spring Framework *container*. Os beans são definidos em ficheiros de configuração Spring (ou, mais recentemente, com **anotações**).
 
-Thymeleaf is a modern server-side Java template engine for both web and standalone environments.
+### Programação de uma aplicação Web
+```java
+@Controller //retorna uma vista
+public class GreetingController {
 
-Thymeleaf's main goal is to bring elegant natural templates to your development workflow — HTML that can be correctly displayed in browsers and also work as static prototypes, allowing for stronger collaboration in development teams.
+	@GetMapping("/greeting")
+	public String greeting(@RequestParam(name="name", required=false, defaultValue="World") String name, Model model) {
+		model.addAttribute("name", name);
+		return "greeting";
+	}
 
+}
+```
+```java
+@RestController //retorna um objeto do domínio como JSON
+public class RESTGreetingController {
 
-# 2.4
+	private static final String template = "Hello, %s!";
+	private final AtomicLong counter = new AtomicLong();
 
-            Gson gson = new Gson();
-            Type showListType = new TypeToken<ArrayList<ShowObject>>(){}.getType();
-            ArrayList<ShowObject> results = gson.fromJson(response.toString(), showListType); 
-            
-            // JSONArray shows = new JSONArray(response.toString());
-            // List<ShowObject> results = new ArrayList<ShowObject>();
-            // for (int i = 0 ; i < shows.length(); i++) {
-            //     JSONObject show = shows.getJSONObject(i);
-            //     String name = show.getString("name");
-            //     String slug = show.getString("slug");
-            //     results.add(new ShowObject(name, slug));
-            // }
+	@GetMapping("/restgreeting")
+	public Greeting greeting(@RequestParam(value = "name", defaultValue = "World") String name) {
+		return new Greeting(counter.incrementAndGet(), String.format(template, name));
+	}
+}
+```
+A principal diferença entre um *controller* MVC tradicional e um *controller* de uma RESTful API é a forma como o corpo da resposta HTTP é criado. Em vez de entregar ao HTML, este segundo *controller* devolve um POJO (Plain Old Java Object), que é posteriormente apresentado em JSON.
 
+### Thymeleaf
+O Thymeleaf é um *template engine* para Java, que permite a criação de páginas HTML dinâmicas, com base em modelos.
+```html
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head> 
+    <title>Getting Started: Serving Web Content</title> 
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+    <p th:text="'Hello, ' + ${name} + '!'" />
+</body>
+</html>
+```
+
+# 2.4) "Wrapping-up & integrating concepts"
+
+| Método | *Endpoint* 				   | Conteúdo           |
+| -------|---------------------------- | ------------------ |
+| GET    | api/quote       			   | Citação aleatória. |
+| GET    | api/shows                   | Lista de séries.   |
+| GET    | api/quotes?show=\<slug\>    | Citação aleatória de uma série específica |
+
+>**Nota**: o campo *slug* é único e é equivalente a usar um ID numérico.
+
+## Serialização de JSON para objetos Java
+Considere-se ```response``` o conteúdo de uma resposta HTTP, num JSON array.
+### org.json
+```java
+JSONArray shows = new JSONArray(response.toString());
+List<ShowObject> results = new ArrayList<ShowObject>();
+for (int i = 0 ; i < shows.length(); i++) {
+    JSONObject show = shows.getJSONObject(i);
+    String name = show.getString("name");
+    String slug = show.getString("slug");
+    results.add(new ShowObject(name, slug));
+}
+```
+### com.google.gson
+```java
+Gson gson = new Gson();
+Type showListType = new TypeToken<ArrayList<ShowObject>>(){}.getType();
+ArrayList<ShowObject> results = gson.fromJson(response.toString(), showListType);
+```
 
 # "Review questions"
 **A.** Ao contrário de um simples applet Java, um servlet não tem *main*. Consequentemente, deve ser executado dentro de um *container*.
@@ -156,73 +221,79 @@ Durante a gestão de um servlet, um servlet *container* executa as seguintes tar
 - Invoca o método service() do servlet, que envia pedidos para os métodos doGet() ou doPost(), dependendo do cabeçalho HTTP no pedido (GET ou POST). Em servlets HTTP, esse método é geralmente *overridden* na classe HttpServlet.
 - Invoca o método destroy() do servlet, para o descartar, quando apropriado. Por razões de desempenho, é fequente o *container* preservar uma instância de servlet em memória para reutilização, em vez de o destruir de ccada vez que tenha terminado a sua tarefa. O servlet é geralmente destruído em eventos pouco frequentes, tais como o encerramento do servidor Web.
 
-**B.** Explain, in brief, the “dynamics” of Model-View-Controller approach used in Spring Boot to serve 
-web content. (You may exemplify with the context of the previous exercises.)
+**B.** A dinâmica MVC do SpringBoot foi desenhada em torno de um DispatcherServlet, que atua como *front controller*. Quando interceta um pedido HTTP, o DispatcherServlet escolhe o *handler*, para o qual aquele tipo de pedido está mapeado. O *handler* correspondente tanto pode ser um *controller* como um *view resolver*. O *controller* é responsável por processar o pedido e devolver um *ModelAndView*. O *view resolver* é responsável por resolver a vista, geralmente uma página HTML, mas não necessariamente. Por fim, o DispatcherServlet devolve a vista ao cliente.
 
+Tomando como exemplo o tutorial "Greeting":
+- O *model* é a classe Greeting, que encapsula o nome e o ID do utilizador.
+- O *controller* é a classe GreetingController, que recebe pedidos HTTP e devolve uma *view*.
+- A *view* é o template Thymeleaf, que recebe os dados do modelo e os renderiza.
 
-The Spring Web model-view-controller (MVC) framework is designed around a DispatcherServlet that dispatches requests to handlers, with configurable handler mappings, view resolution, locale and theme resolution as well as support for uploading files. The default handler is based on the @Controller and @RequestMapping annotations, offering a wide range of flexible handling methods. With the introduction of Spring 3.0, the @Controller mechanism also allows you to create RESTful Web sites and applications, through the @PathVariable annotation and other features.
+**Arquitetura MVC**
+- Modelo (Model): encapsula os dados da aplicação.
+- Vista (View): renderiza os dados do modelo, gerando um output.
+- Controlador (Controller): processa os pedidos do utilizador e entrega-os à *view* para renderização.
 
-In Spring Web MVC you can use any object as a command or form-backing object; you do not need to implement a framework-specific interface or base class. Spring's data binding is highly flexible: for example, it treats type mismatches as validation errors that can be evaluated by the application, not as system errors. Thus you need not duplicate your business objects' properties as simple, untyped strings in your form objects simply to handle invalid submissions, or to convert the Strings properly. Instead, it is often preferable to bind directly to your business objects.
+>*Nota*: O "spring-boot-starter-web" depende transitivamente do "spring-webmvc".
 
+![DispatecherServlet](https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/images/mvc.png)
 
-https://docs.spring.io/spring-framework/docs/3.2.x/spring-framework-reference/html/mvc.html
+A dinâmica MVC do SpringBoot é orientada a pedidos, tendo sido desenhada em torno de um Servlet central, que envia pedidos aos *controllers* e oferece outras funcionalidades que facilitam o desenvolvimento de aplicações web. O Spring's DispatcherServlet, no entanto, faz mais do que apenas isso.
 
-**C**. Inspect the POM.xml for the previous Spring Boot projects. What is the role of the “starters” 
-dependencies?
-https://www.baeldung.com/spring-boot-starters
-Spring Boot Starter Web is used for building RESTful applications using Spring MVC. Spring Boot Starter Tomcat is the default embedded container for Spring Boot Starter Web. We cannot exclude it while using web services. We can exclude it when we want to use another embedded container.
+**C.**
 
-**D.** Which annotations are transitively included in the @SpringBootApplication?
+- **spring-boot-starter-web**: para desenvolvimento web, nomeadamente serviços RESTful.
+- **spring-boot-starter-tomcat**: para usar o Tomcat como *embedded servlet container*. 
+- **spring-boot-starter-test**: para testes unitários.
+- **spring-boot-starter-thymeleaf** (não é automaticamente explicitado): para usar o Thymeleaf como *template engine*. 
 
-@SpringBootApplication is a convenience annotation that adds all of the following:
+Estas *starter packs*, por sua vez, têm várias dependências transitivas, que são automaticamente incluídas no projeto. Por exemplo, o "spring-boot-starter-web" depende transitivamente do "spring-webmvc".
 
-    @Configuration: Tags the class as a source of bean definitions for the application context.
+**D.**
+- ```@Configuration```: permite o registo de *beans* extra no contexto da aplicação, bem como a importação de mais classes de configuração.
 
-    @EnableAutoConfiguration: Tells Spring Boot to start adding beans based on classpath settings, other beans, and various property settings. For example, if spring-webmvc is on the classpath, this annotation flags the application as a web application and activates key behaviors, such as setting up a DispatcherServlet.
+- ```@EnableAutoConfiguration```: solicita ao Spring Boot que adicione *beans*, com base em várias configurações, entre os quais o *classpath*, e outros *beans*. Por exemplo, se o "Spring-webmvc" estiver no *classpath*, esta anotação assinala a aplicação como do tipo web e ativa comportamentos chave, tais como a criação de um DispatcherServlet.
 
-    @ComponentScan: Tells Spring to look for other components, configurations, and services in the com/example package, letting it find the controllers.
+- ```@ComponentScan```: permite procurar por outros componentes, configurações e serviços no *package* onde se encontra a aplicação.
 
+**E.** 
+	
+**Boas práticas para o desenho de uma REST API**:
 
-https://docs.spring.io/spring-boot/docs/2.0.x/reference/html/using-boot-using-springbootapplication-annotation.html
+1. Encapsular os dados em JSON, visto que é atualmente um formato mais suportado pelas frameworks Web do que o XML, por exemplo.
 
-**E.** Search online for the topic “Best practices for REST API design”. From what you could learn, 
-select your “top 5” practices, and briefly explain them in you own words. 
-https://www.freecodecamp.org/news/rest-api-best-practices-rest-endpoint-design-examples/
+2. Usar nomes em vez de verbos nos *endpoints*, pois os métodos HTTP já são verbos (POST, GET, DELETE,...).
+	- Por exemplo, um *endpoint* para aceder a uma lista de livros não deve ser algo do género "library.com/getBooks", mas sim "library.com/books".
 
-pode usar-se API externa para fornecer dados à nossa própria API
-retornar um array de JSONs
+3. Usar o plural para nomear as coleções, pois é mais fácil para os humanos entender o seu significado, sem as abrir.
 
-# Other
-Java2EE
-JavaEE
-JakartaEE (V9)
+4. Adicionar a versão ao endpoint: por exemplo, "library.com/v1/books".
 
-
-Packaging
-pom -> jar -> jre
-    -> war -> Web container
-           -> Application container
-
-JavaEE -> JakartaEE ----|> SpringBoot
-
-JakartaEE -> specifications
-	  -> implementations
-
-# Imagens
-http://www.programcreek.com/wp-content/uploads/2013/04/servlet-container-life-cycle.jpg
+5. Permitir subrecursos, de modo a representar relacionamentos entre recursos. Por exemplo, constata-se intutivamente que "library.com/v1/students/102534/books" retorna a lista de livros do estudante com o ID "102534".
 
 
 # Referências
 https://www.baeldung.com/java-servers
-https://docs.oracle.com/cd/A97688_16/generic.903/a97680/overview.htm
 
+https://docs.oracle.com/cd/A97688_16/generic.903/a97680/overview.htm
 
 https://www.javatpoint.com/spring-boot-thymeleaf-view
 
 https://www.javatpoint.com/container
+
+https://www.educative.io/answers/web-server-vs-application-server
+
+https://www.baeldung.com/jetty-embedded
+
+https://www.baeldung.com/spring-bean
+
 https://www.baeldung.com/spring-boot-starters
+
+https://www.geeksforgeeks.org/spring-mvc-framework/
+
+https://docs.oracle.com/javaee/7/api/javax/servlet/http/HttpServlet.html
+
 https://www.geeksforgeeks.org/difference-between-spring-boot-starter-web-and-spring-boot-starter-tomcat/
+
 https://docs.spring.io/spring-boot/docs/2.0.x/reference/html/using-boot-using-springbootapplication-annotation.html
 
-pode usar-se API externa para fornecer dados à nossa própria API (não tem id, mas slug)
-retornar um array de JSONs
+https://www.freecodecamp.org/news/rest-api-best-practices-rest-endpoint-design-examples/
