@@ -1,0 +1,80 @@
+[
+    {
+        "name": "Star Wars: Episode V - The Empire Strikes Back",
+        "slug": "star-wars-episode-v-the-empire-strikes-back",
+        "year": 1980,
+        "rating": 8.8
+    },
+    {
+        "name": "The Godfather",
+        "slug": "the-godfather",
+        "year": 1972,
+        "rating": 9.2
+    },
+    {
+        "name": "Taxi Driver",
+        "slug": "taxi-driver",
+        "year": 1976,
+        "rating": 8.3
+    },
+    {
+        "name": "Casablanca",
+        "slug": "casablanca",
+        "year": 1942,
+        "rating": 8.5
+    },
+    {
+        "name": "Sudden Impact",
+        "slug": "sudden-impact",
+        "year": 1983,
+        "rating": 7.2
+    },
+    {
+        "name": "Sunset Boulevard",
+        "slug": "sunset-boulevard",
+        "year": 1950,
+        "rating": 8.5
+    },
+    {
+        "name": "Star Wars: Episode IV - A New Hope",
+        "slug": "star-wars-episode-iv-a-new-hope",
+        "year": 1977,
+        "rating": 8.7
+    },
+    {
+        "name": "All About Eve",
+        "slug": "all-about-eve",
+        "year": 1950,
+        "rating": 8.3
+    },
+    {
+        "name": "Jerry Maguire",
+        "slug": "jerry-maguire",
+        "year": 1996,
+        "rating": 7.3
+    },
+    {
+        "name": "The Wizard of Oz",
+        "slug": "the-wizard-of-oz",
+        "year": 1939,
+        "rating": 8.1
+    },
+    {
+        "name": "Cool Hand Luke",
+        "slug": "cool-hand-luke",
+        "year": 1967,
+        "rating": 8.2
+    },
+    {
+        "name": "Apocalypse Now",
+        "slug": "apocalypse-now",
+        "year": 1979,
+        "rating": 8.5
+    },
+    {
+        "name": "Game of Thrones",
+        "slug": "game-of-thrones",
+        "year": 2011,
+        "rating": 9.5
+    }
+]

@@ -1,0 +1,74 @@
+[
+    {
+        "quote": "Luke, I am your father.",
+        "role": "Darth Vader",
+        "show": "star-wars-episode-v-the-empire-strikes-back",
+        "contain_adult_lang": false
+    },
+    {
+        "quote": "I'm going to make him an offer he can't refuse.",
+        "role": "Don Vito Corleone",
+        "show": "the-godfather",
+        "contain_adult_lang": false
+    },
+    {
+        "quote": "You talking to me?",
+        "role": "Travis Bickle",
+        "show": "taxi-driver",
+        "contain_adult_lang": false
+    },
+    {
+        "quote": "Here's looking at you, kid.",
+        "role": "Rick Blaine",
+        "show": "casablanca",
+        "contain_adult_lang": false
+    },
+    {
+        "quote": "Go ahead, make my day.",
+        "role": "Harry Callahan",
+        "show": "sudden-impact",
+        "contain_adult_lang": false
+    },
+    {
+        "quote": "All right, Mr. DeMille, I'm ready for my close-up.",
+        "role": "Norma Desmond",
+        "show": "sunset-boulevard",
+        "contain_adult_lang": false
+    },
+    {
+        "quote": "May the Force be with you.",
+        "role": "Obi-Wan Kenobi",
+        "show": "star-wars-episode-iv-a-new-hope",
+        "contain_adult_lang": false
+    },
+    {
+        "quote": "Fasten your seatbelts. It's going to be a bumpy night.",
+        "role": "Margo Channing",
+        "show": "all-about-eve",
+        "contain_adult_lang": false
+    },
+    {
+        "quote": "You had me at 'hello.'",
+        "role": "Joe Fox",
+        "show": "jerry-maguire",
+        "contain_adult_lang": false
+    },
+    {
+        "quote": "Toto, I've got a feeling we're not in Kansas anymore.",
+        "role": "Dorothy Gale",
+        "show": "the-wizard-of-oz",
+        "contain_adult_lang": false
+    },
+    {
+        "quote": "What we've got here is failure to communicate.",
+        "role": "Captain",
+        "show": "cool-hand-luke",
+        "contain_adult_lang": false
+    },
+    {
+        "quote": "I love the smell of napalm in the morning.",
+        "role": "Lt. Col. Bill Kilgore",
+        "show": "apocalypse-now",
+        "contain_adult_lang": false
+    }
+]
