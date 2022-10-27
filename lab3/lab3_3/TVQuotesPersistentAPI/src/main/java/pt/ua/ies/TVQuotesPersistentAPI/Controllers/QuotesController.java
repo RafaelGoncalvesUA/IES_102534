@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,9 +24,8 @@ public class QuotesController {
     @GetMapping("/quote")
     public Quote getRandomQuote() 
         throws ResourceNotFoundException {
-        Quote randomQuote = quoteService.getRandomQuote();
-        if (randomQuote == null)
-            throw new ResourceNotFoundException("No quotes found");
+        Quote randomQuote = quoteService.getRandomQuote()
+            .orElseThrow(() -> new ResourceNotFoundException("No quotes found"));
         return randomQuote;
     }
 
@@ -54,10 +52,10 @@ public class QuotesController {
     }
 
     @GetMapping("/quotes")
-    public ResponseEntity<List<Quote>> getQuoteByShow(@RequestParam String show)
+    public Quote getQuoteByShow(@RequestParam String show)
         throws ResourceNotFoundException {
-        List<Quote> quotes = quoteService.findByShow(show)
+        Quote quote = quoteService.getRandomBySlug(show)
             .orElseThrow(() -> new ResourceNotFoundException("No quotes for this show :: " + show));
-        return ResponseEntity.ok().body(quotes);
+        return quote;
     }
 }

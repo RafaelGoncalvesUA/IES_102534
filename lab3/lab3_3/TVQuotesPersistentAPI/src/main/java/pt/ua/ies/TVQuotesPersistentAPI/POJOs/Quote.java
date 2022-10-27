@@ -1,10 +1,11 @@
 package pt.ua.ies.TVQuotesPersistentAPI.POJOs;
 
-import javax.persistence.Column;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,8 +16,8 @@ public class Quote {
     private long id;
     private String quote;
     private String role;
-    @Column(name = "show_name")
-    private String show;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Show show;
     private boolean contain_adult_lang;
 
     public Long getId() {
@@ -39,10 +40,10 @@ public class Quote {
     public void setrole(String role) {
         this.role = role;
     }
-    public String getShow() {
+    public Show getShow() {
         return show;
     }
-    public void setShow(String show) {
+    public void setShow(Show show) {
         this.show = show;
     }
     public boolean getContain_adult_lang() {

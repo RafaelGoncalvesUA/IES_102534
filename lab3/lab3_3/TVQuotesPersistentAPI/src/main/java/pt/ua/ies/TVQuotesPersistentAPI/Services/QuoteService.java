@@ -11,12 +11,8 @@ import pt.ua.ies.TVQuotesPersistentAPI.Repositories.QuoteRepository;
 public class QuoteService {
     @Autowired
     private QuoteRepository quoteRepository;
-    public Quote getRandomQuote() {
-        List<Quote> quotes = quoteRepository.findAll();
-        if (quotes.size() == 0) {
-            return null;
-        }
-        return quotes.get((int)(Math.random() * quotes.size()));
+    public Optional<Quote> getRandomQuote() {
+        return quoteRepository.getRandomQuote();
     }
 
     public Quote save(Quote quote) {
@@ -47,7 +43,7 @@ public class QuoteService {
         quoteRepository.deleteById(id);
     }
 
-    public Optional<List<Quote>> findByShow(String show) {
-        return quoteRepository.findByShow(show);
+    public Optional<Quote> getRandomBySlug(String slug) {
+        return quoteRepository.getRandomBySlug(slug);
     }
 }
