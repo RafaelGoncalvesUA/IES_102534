@@ -309,7 +309,7 @@ Body: ```none```
     "id": 2,
     "firstName": "John",
     "lastName": "Doe",
-    "emailId": "doe@gmail.com
+    "emailId": "doe@gmail.com"
 }
 ```
 
@@ -349,12 +349,111 @@ mysql> show databases;
 ```
 
 # 3.3 - "Wrapping-up and integrating concepts"
+## Arquitetura do exercício
+Com vista a separar completamente a *boundary* dos repositórios, foram criadas classes (intermediárias) de serviço, que contêm a lógica de negócio da aplicação e são invocadas pelos *controllers*.
+
+```
+TVQuotesPersistentAPI
+├── Controllers
+│   ├── QuotesController.java
+│   └── ShowsController.java
+├── ErrorHandling
+│   ├── ErrorDetails.java
+│   ├── GlobalExceptionHandler.java
+│   └── ResourceNotFoundException.java
+├── POJOs
+│   ├── Quote.java
+│   └── Show.java
+├── Repositories
+│   ├── QuoteRepository.java
+│   └── ShowRepository.java
+├── Services
+│   ├── QuoteService.java
+│   └── ShowService.java
+├── ServletInitializer.java
+└── TvQuotesPersistentApiApplication.java
+```
+
+## Comparação de padrões: Data Access Object (DAO) vs Repository
+São bastante semelhantes, porém com as seguintes diferenças:
+ - O DAO é uma abstração da persistência dos dados.
+ - Um repositório emula uma coleção de objetos.
+ - O DAO é um conceito de mais baixo nível, mais próximo dos sistemas de armazenamento.
+ - Um repositório é um conceito de mais alto nível, mais próximo da lógica de negócio.
+
+ Um repositório SpringBoot é **muito próximo** do padrão DAO, onde há classes que implementam as operações CRUD.
+
+## Endpoints da aplicação
+| Método HTTP | URL | Descrição |
+| ----------- | ----------- | ----------- |
+| POST | /quote | Adiciona uma citação |
+| POST | /quotes | Adiciona uma lista de citações |
+| POST | /show | Adiciona um filme/série |
+| POST | /shows | Adiciona uma lista de filmes/séries |
+| GET | /quote | Retorna uma citação aleatória |
+| GET | /quotes?show={show_slug} | Retorna todas as citações de um determinado filme/série |
+| GET | /shows | Retorna todos os filmes/séries com citações registadas |
+| DELETE | /quote/{id} | Remove uma citação |
+| DELETE | /show/{id} | Remove um filme/série |
 
 
+## Execução de comandos SQL no repositório
+```java
+@Repository
+public interface ShowRepository extends JpaRepository<Show, Long>{
+    @Query("SELECT s FROM Show s WHERE s.slug IN (SELECT q.show FROM Quote q)")
+    List<Show> findAllShowsWithQuote();
+}
+```
 
-The Data Access Object (DAO) pattern is a structural pattern that allows us to isolate the application/business layer from the persistence layer (usually a relational database but could be any other persistence mechanism) using an abstract API.
+## Dockerização da aplicação em conjunto com o MySQL
+### Compilação da aplicação
+```mvn clean package```
 
-The API hides from the application all the complexity of performing CRUD operations in the underlying storage mechanism. This permits both layers to evolve separately without knowing anything about each other.
+### Dockerfile
+```dockerfile
+FROM eclipse-temurin:17-jdk-alpine
+VOLUME /tmp
+COPY target/*.war app.war
+ENTRYPOINT ["java","-jar","/app.war"]
+```
+
+### *Build* da imagem da aplicação
+```docker build -t tvquotes .```
+
+### docker-compose.yml
+```yml
+version: "3"
+services:
+  server:
+    image: tvquotes:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - spring.datasource.url=jdbc:mysql://mysqldb:3306/demo
+    networks:
+      - springmysql-net
+    depends_on:
+      - mysqldb
+
+  mysqldb:
+    image: mysql:5.7
+    ports:
+      - "33060:3306"
+    networks:
+      - springmysql-net
+    environment:
+      - MYSQL_ROOT_PASSWORD=secret1
+      - MYSQL_DATABASE=demo
+      - MYSQL_USER=demo
+      - MYSQL_PASSWORD=secret2
+
+networks:
+  springmysql-net:
+```
+
+### Execução da aplicação
+```docker compose up```
 
 # "Review Questions"
 **A.** A anotação @Controller marca uma classe como um *controller* do Spring, para que essa possa mapear URLs em páginas HTML dinâmicas.
@@ -390,8 +489,6 @@ https://www.baeldung.com/spring-component-repository-service
 
 https://www.javaguides.net/2018/09/spring-autowired-annotation-with-example.html
 
-https://www.baeldung.com/java-dao-pattern
-
 https://www.geeksforgeeks.org/difference-between-controller-and-restcontroller-annotation-in-spring/
 
 https://www.javaguides.net/2018/09/spring-boot-2-jpa-mysql-crud-example.html
@@ -401,3 +498,9 @@ https://www.javaguides.net/2018/09/spring-boot-2-rest-apis-integration-testing.h
 https://spring.io/guides/gs/accessing-data-jpa/#_create_simple_queries
 
 https://www.baeldung.com/spring-request-param
+
+https://spring.io/guides/topicals/spring-boot-docker/
+
+https://www.baeldung.com/java-dao-vs-repository
+
+https://medium.com/javarevisited/rest-api-using-spring-boot-part-2-adding-model-service-controller-and-dao-implementation-697284b4ff38
