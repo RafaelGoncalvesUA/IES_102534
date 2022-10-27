@@ -4,7 +4,7 @@ O SpringBoot é uma framework orientada para o desenvolvimento de *backend* e, c
 
 Para esse efeito, o *backend* de uma aplicação SpringBoot está habitualmente organizado em três camadas:
 - Camada de Controlo (*Boundary*) - a "fronteira" com a camada de apresentação, isto é, com o frontend. É responsável por receber pedidos e enviar respostas, no protocolo HTTP.
-- Camada de Serviços (*Buisness Logic*): é responsável por processar as solicitações e gerar as respostas. É aqui que se encontra a lógica de negócio da aplicação e que são injetadas as suas dependências.
+- Camada de Serviços (*Buisness Logic*): é responsável por processar as solicitações e gerar as respostas. É aqui onde se encontra a lógica de negócio da aplicação e onde são injetadas as suas dependências.
 - Camada de Persistência (*Persistence*): responsável por armazenar e descarregar conteúdo da base de dados.
 ```mermaid
 graph LR
@@ -34,7 +34,7 @@ graph LR
 ## @Bean vs @Component
 São duas anotações genéricas que representam componentes do Spring.
 
-```@Bean```: usado para declarar explicitamente um *bean*, ao invés de deixar o Spring fazê-lo automaticamente. Desacopla a declaração do *bean* da definição da classe, dando maior liberdade ao *developer*.
+```@Bean```: usado para declarar explicitamente um *bean*, ao invés de deixar o Spring fazê-lo automaticamente. Desacopla a declaração do *bean* da definição da classe, dando ao *developer* maior "poder" de configuração.
 
 ```@Component``` usado para autodeteção e autoconfiguração de *beans*, desencadeando um *scanning* ao *classpath*. Apresenta diferentes especializações, tais como @Controller, @Repository e @Service.
 
@@ -45,8 +45,8 @@ Esta API destinava-se originalmente à comunicação com bases de dados relacion
 
 ## Dependências utilizadas na resolução do exercício
 - **Spring Web**: para desenvolvimento de aplicações Web, nomeadamente RESTful, usando o Spring MVC e o Apache Tomcat como servidor embutido.
-- **Thymeleaf Template Engines**: é um mecanismo de *templating*, que atua do lado do servidor e que visa gerar páginas HTML dinâmicas.
-- **Spring Data JPA SQL**: permite a comunicação com bases de dados relacionais, sendo o Spring Data o seu intermediário e o Hibernate a implementação da JPA.
+- **Thymeleaf Template Engines**: como mecanismo de *templating*, que atua do lado do servidor e que visa gerar páginas HTML dinâmicas.
+- **Spring Data JPA SQL**: com vista a comunicar com bases de dados relacionais, sendo o Spring Data o seu intermediário e o Hibernate a implementação da JPA.
 - **H2 Database SQL**: base de dados SQL embutida e *in-memory*.
 - **Validation I/O**: trata da validação do input e output, recorrendo ao Hibernate *validator*.
 
@@ -72,7 +72,7 @@ public class User {
     [...]
 }
 ```
->**Nota**: a classe User não deve apresentar qualquer construtor explícito, para não entrar em conflito com o construtor sem parâmetros da @Entity.
+>**Nota**: a classe User não deve apresentar um construtor explícito, para não entrar em conflito com o construtor sem parâmetros da @Entity.
 
 ### Definição do repositório
 ```java
@@ -128,15 +128,17 @@ O prefixo "th" indica que o código HTML é interpretado pelo Thymeleaf.
 
 
 ## Questões do exercício
-### "The 'UserController' class gets an instance of 'userRepository' through its constructor; how is this new repository instantiated?"
+**"The 'UserController' class gets an instance of 'userRepository' through its constructor; how is this new repository instantiated?"**
+
 O 'userRepository' é uma variável com a keyword ```final```, o que significa que não pode ser alterada, após a sua inicialização. Através da anotação ```@Autowired```, o SpringBoot fornece ao 'UserController' uma instância do repositório.
 
-### "List the methods invoked in the 'userRepository' object by the 'UserController'. Where are these methods defined?"
+**"List the methods invoked in the 'userRepository' object by the 'UserController'. Where are these methods defined?"**
+
 O userRepository é uma instância da interface UserRepository, que estende a CrudRepository, onde são definidos os seguintes métodos CRUD:
 - ```save()```
 - ```saveAll()```
 - ```findById()```
-- ```èxistsById()```
+- ```existsById()```
 - ```findAll()```
 - ```findAllById()```
 - ```count()```
@@ -145,24 +147,18 @@ O userRepository é uma instância da interface UserRepository, que estende a Cr
 - ```deleteAllById()```
 - ```deleteAll()```
 
-### "Where is the data being saved? when I call save() from CRUD repository?"
+**"Where is the data being saved?"**
+
 Numa base de dados relacional H2, embutida e *in-memory*.
 
-### "Where is the rule for the “not empty” email address defined?"
+**"Where is the rule for the 'not empty' email address defined?"**
+
 Através da anotação ```@NotBlank```.
 
 # 3.2 - "Multilayer applications: exposing data with REST interface"
 ## Configuração da conexão a uma base de dados MySQL
-```
-# MySQL
-spring.datasource.url=jdbc:mysql://127.0.0.1:33060/demo
-spring.datasource.username=demo
-spring.datasource.password=secret2
-spring.jpa.database-platform=org.hibernate.dialect.MySQL5InnoDBDialect
+No ficheiro ```src/main/resources/application.properties```, devem ser colocadas as definições fornecidas pelo enunciado do guião, tais como o URL, o username e a password do servidor MySQL.
 
-# Strategy to auto update the schemas (create, create-drop, validate, update)
-spring.jpa.hibernate.ddl-auto = update
-```
 **JDBC (Java Database Conectivity)** é a API Java responsável por gerir a conexão a uma base de dados, transmitindo-lhe comandos SQL e tratando dos respetivos resultados.
 
 ## Realização de testes aos *endpoints* da aplicação (com Postman)
@@ -288,9 +284,9 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long>{
 ```java
 @GetMapping("/employees")
 public List<Employee> getAllEmployees(@RequestParam (required = false) String email) {
-    if (email == null)
+    if (email == null) // cliente não fornece o parâmetro 'email'
         return employeeRepository.findAll();
-    else
+    else // cliente fornece o parâmetro 'email'
         return employeeRepository.findByEmailId(email);
 }
 ```
@@ -324,16 +320,8 @@ bash-4.2# mysql -u root -p
 Enter password: 
 
 Welcome to the MySQL monitor.  Commands end with ; or \g.
-Your MySQL connection id is 5
-Server version: 5.7.40 MySQL Community Server (GPL)
 
-Copyright (c) 2000, 2022, Oracle and/or its affiliates.
-
-Oracle is a registered trademark of Oracle Corporation and/or its
-affiliates. Other names may be trademarks of their respective
-owners.
-
-Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+...
 
 mysql> show databases;
 +--------------------+
@@ -345,7 +333,6 @@ mysql> show databases;
 | performance_schema |
 | sys                |
 +--------------------+
-5 rows in set (0.00 sec)
 ```
 
 # 3.3 - "Wrapping-up and integrating concepts"
@@ -383,7 +370,7 @@ São bastante semelhantes, porém com as seguintes diferenças:
 
  Um repositório SpringBoot é **muito próximo** do padrão DAO, onde há classes que implementam as operações CRUD.
 
-## Endpoints da aplicação
+## Endpoints da aplicação desenvolvida
 | Método HTTP | URL | Descrição |
 | ----------- | ----------- | ----------- |
 | POST | /quote | Adiciona uma citação |
@@ -398,12 +385,16 @@ São bastante semelhantes, porém com as seguintes diferenças:
 
 
 ## Execução de comandos SQL no repositório
+### Exemplo de query JPA
 ```java
-@Repository
-public interface ShowRepository extends JpaRepository<Show, Long>{
-    @Query("SELECT s FROM Show s WHERE s.slug IN (SELECT q.show FROM Quote q)")
-    List<Show> findAllShowsWithQuote();
-}
+@Query("SELECT s FROM Show s WHERE s IN (SELECT q.show FROM Quote q)")
+List<Show> findAllShowsWithQuote();
+```
+
+### Exemplo de query nativa (SQL)
+```java
+@Query(value = "SELECT * FROM shows WHERE slug IN (SELECT show_slug FROM quotes)", nativeQuery = true)
+List<Show> findAllShowsWithQuote();
 ```
 
 ## Dockerização da aplicação em conjunto com o MySQL
@@ -459,9 +450,10 @@ networks:
 **A.** A anotação @Controller marca uma classe como um *controller* do Spring, para que essa possa mapear URLs em páginas HTML dinâmicas.
 A @RestController é uma simplificação que inclui as anotações @Controller e @ResponseBody, permitindo que os métodos da classe retornem objetos Java, que serão automaticamente serializados para JSON, sem a necessidade de utilizar o @ResponseBody em cada método.
 
-**B.** Create a visualization of the Spring Boot layers (UML diagram or similar), displaying the key abstractions in the solution of 3.3, in particular: entities, repositories, services and REST controllers. Describe the role of the elements modeled in the diagram. 
-
-FAZEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEER
+**B.** 
+![Diagrama](lab3_3/diagram.png)
+Os papéis dos elementos do diagrama encontram-se descritos em pontos anteriores do *notebook*.
+>Ver [Arquitetura de uma aplicação web SpringBoot](#arquitetura-de-uma-aplicação-web-springboot) e [Arquitetura do exercício](#arquitetura-do-exercício).
 
 **C.**
 - ```@Table(name = "tableName")``` - mapeamento para uma tabela com um nome específico
