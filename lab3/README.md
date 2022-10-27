@@ -391,7 +391,7 @@ São bastante semelhantes, porém com as seguintes diferenças:
 | POST | /show | Adiciona um filme/série |
 | POST | /shows | Adiciona uma lista de filmes/séries |
 | GET | /quote | Retorna uma citação aleatória |
-| GET | /quotes?show={show_slug} | Retorna todas as citações de um determinado filme/série |
+| GET | /quotes?show={show_slug} | Retorna uma citação aleatória de um determinado filme/série |
 | GET | /shows | Retorna todos os filmes/séries com citações registadas |
 | DELETE | /quote/{id} | Remove uma citação |
 | DELETE | /show/{id} | Remove um filme/série |
